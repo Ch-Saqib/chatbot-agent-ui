@@ -39,7 +39,7 @@ export const ModelSelectorProvider = ({
       : new URL(window.location.href).searchParams.get("lgcDeploymentUrl")
 
   const agent =
-    model === "google_genai" ? "research_agent_google_genai" : "student_learning_multiagent";
+    model === "google_genai" ? "research_agent_google_genai" : "react_agent";
 
   return (
     <ModelSelectorContext.Provider

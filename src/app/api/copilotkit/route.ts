@@ -21,7 +21,7 @@ export const POST = async (req: NextRequest) => {
         langsmithApiKey,
         agents: [
           {
-            name: "student_learning_multiagent",
+            name: "react_agent",
             description: "Learning agent for student interactions",
           },
         ],
