@@ -1,10 +1,11 @@
-"use client"
+"use client";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { useSidebar } from "@/hooks/use-sidebar";
 import { useEffect, useState } from "react";
 import "./globals.css";
 import { Sidebar } from "@/components/Sidebar";
+import { ThemeProvider } from "@/components/providers/theme-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -50,7 +51,9 @@ export default function RootLayout({
               isOpen ? "ml-72" : "ml-[90px]"
             }`}
           >
-            {children}
+            <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+              {children}
+            </ThemeProvider>
           </main>
         </div>
       </body>
