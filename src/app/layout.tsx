@@ -1,4 +1,4 @@
-"use client";
+"use client"
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { useSidebar } from "@/hooks/use-sidebar";
@@ -51,8 +51,8 @@ export default function RootLayout({
               isOpen ? "ml-72" : "ml-[90px]"
             }`}
           >
-            <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-              {children}
+              <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+            {children}
             </ThemeProvider>
           </main>
         </div>

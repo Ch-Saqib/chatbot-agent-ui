@@ -33,8 +33,8 @@ import {
         groupLabel: "",
         menus: [
           {
-            href: "/dashboard",
-            label: "Dashboard",
+            href: "/",
+            label: "Home",
             icon: LayoutGrid,
             submenus: []
           }

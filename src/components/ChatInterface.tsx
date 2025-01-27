@@ -64,7 +64,7 @@ export default function ChatInterface() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <header className="text-center bg-gray-300 p-4 text-lg font-bold border-black border-b">
+          <header className="text-center  p-4 text-lg font-bold border-black border-b">
             CHATBOT
           </header>
         </motion.div>
