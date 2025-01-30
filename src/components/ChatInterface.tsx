@@ -86,6 +86,7 @@ export default function ChatInterface() {
               <h2 className="text-3xl font-semibold text-gray-700 text-center">
                 Welcome to your AI Learning Assistant!
               </h2>
+
               <Textarea
                 placeholder="Ask me anything..."
                 value={userInput}
@@ -96,15 +97,16 @@ export default function ChatInterface() {
                     handleSendMessage();
                   }
                 }}
-                className="w-full max-w-2xl p-4 text-lg rounded-lg shadow-md resize-none"
+                className="w-full max-w-2xl p-4 text-lg rounded-lg resize-none bg-white border-b shadow-lg border-black"
                 rows={3}
               />
+
               <div className="grid grid-cols-2 gap-4 w-full max-w-2xl">
                 {starterPrompts.map((prompt, index) => (
                   <Button
                     key={index}
                     onClick={() => handleSendMessage(prompt)}
-                    className="text-left p-4 h-auto"
+                    className="text-left p-4 h-auto shadow-md"
                     variant="outline"
                   >
                     {prompt}
