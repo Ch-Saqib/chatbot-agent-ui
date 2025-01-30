@@ -1,37 +1,22 @@
-"use client";
+import Link from "next/link";
 
-import ChatInterface from "@/components/ChatInterface";
-import { LearningAgentProvider } from "@/lib/learning-agent-provider";
-import {
-  ModelSelectorProvider,
-  useModelSelectorContext,
-} from "@/lib/model-selector-provider";
-
-import { CopilotKit } from "@copilotkit/react-core";
-import "@copilotkit/react-ui/styles.css";
-
-export default function ModelSelectorWrapper() {
+export default function Home() {
   return (
-    <main className="">
-      <ModelSelectorProvider>
-        <Home />
-      </ModelSelectorProvider>
-    </main>
-  );
-}
-
-function Home() {
-  const { agent, lgcDeploymentUrl } = useModelSelectorContext();
-
-  return (
-    <CopilotKit
-      runtimeUrl={`/api/copilotkit?lgcDeploymentUrl=${lgcDeploymentUrl ?? ""}`}
-      showDevConsole={false}
-      agent={agent}
-    >
-      <LearningAgentProvider>
-        <ChatInterface />
-      </LearningAgentProvider>
-    </CopilotKit>
+    <div className="container mx-auto">
+      <h1 className="text-4xl font-bold text-center mt-20">
+        Welcome to Chat Bot
+      </h1>
+      <p className="text-center mt-5">
+        Click the link below to start chatting with Chatbot
+      </p>
+      <div className="flex justify-center mt-5">
+        <Link
+          href="/chat"
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        >
+          Chat with Copilot
+        </Link>
+      </div>
+    </div>
   );
 }

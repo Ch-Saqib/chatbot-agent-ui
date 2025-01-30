@@ -5,7 +5,8 @@ import {
     Bookmark,
     SquarePen,
     LayoutGrid,
-    LucideIcon
+    LucideIcon,
+    Bot
   } from "lucide-react";
   
   type Submenu = {
@@ -36,6 +37,17 @@ import {
             href: "/",
             label: "Home",
             icon: LayoutGrid,
+            submenus: []
+          }
+        ]
+      },
+      {
+        groupLabel: "",
+        menus: [
+          {
+            href: "/chat",
+            label: "Chat",
+            icon: Bot,
             submenus: []
           }
         ]
