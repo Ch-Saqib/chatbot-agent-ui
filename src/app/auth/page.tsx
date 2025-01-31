@@ -5,6 +5,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { signIn } from "next-auth/react";
 import { FcGoogle } from "react-icons/fc";
 import { FaApple } from "react-icons/fa";
+import Image from "next/image";
+import Login from "./../../../public/login.png";
 
 export default function AuthPage() {
   const [isLogin, setIsLogin] = useState(true);
@@ -162,11 +164,14 @@ export default function AuthPage() {
                 </p>
               </div>
             </div>
-            <div className="w-1/2 bg-gray-50">
-              <img
-                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Login.PNG-oppVCAPB9bGACpeivk3JeT1Ah09MSV.png"
+            <div className="w-1/2 bg-gray-50 relative">
+              <Image
+                src={Login || "/placeholder.svg"}
                 alt="Decorative leaves"
-                className="w-full h-full object-cover"
+                className="object-cover"
+                fill
+                priority
+                sizes="50vw"
               />
             </div>
           </motion.div>
@@ -179,11 +184,14 @@ export default function AuthPage() {
             exit={{ opacity: 0, x: -100 }}
             transition={{ duration: 0.5 }}
           >
-            <div className="w-1/2 bg-gray-50">
-              <img
-                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Signup.PNG-KL4t6qDyU14CEy6yIYS4FHObdIjUvG.png"
+            <div className="w-1/2 bg-gray-50 relative">
+              <Image
+                src={Login || "/placeholder.svg"}
                 alt="Decorative leaves"
-                className="w-full h-full object-cover"
+                className="object-cover"
+                fill
+                priority
+                sizes="50vw"
               />
             </div>
             <div className="w-1/2 p-12 flex flex-col justify-center">

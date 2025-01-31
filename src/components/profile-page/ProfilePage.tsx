@@ -4,6 +4,17 @@ import { useState } from "react";
 import { useSession } from "next-auth/react";
 import { motion } from "framer-motion";
 import {
+  Bell,
+  Search,
+  Github,
+  Linkedin,
+  Twitter,
+  Instagram,
+  Globe,
+} from "lucide-react";
+import { format } from "date-fns";
+
+import {
   Select,
   SelectContent,
   SelectItem,
@@ -13,10 +24,36 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+
+interface SocialLink {
+  platform: string;
+  url: string;
+  icon: any;
+}
 
 export default function ProfilePage() {
   const { data: session } = useSession();
   const [isEditing, setIsEditing] = useState(false);
+  const currentDate = new Date();
+  const [socialLinks, setSocialLinks] = useState<SocialLink[]>([
+    { platform: "GitHub", url: "", icon: Github },
+    { platform: "LinkedIn", url: "", icon: Linkedin },
+    { platform: "Twitter", url: "", icon: Twitter },
+    { platform: "Instagram", url: "", icon: Instagram },
+    { platform: "Website", url: "", icon: Globe },
+  ]);
+
+  const handleSocialLinkChange = (index: number, url: string) => {
+    const newLinks = [...socialLinks];
+    newLinks[index].url = url;
+    setSocialLinks(newLinks);
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -29,25 +66,89 @@ export default function ProfilePage() {
         >
           <div className="flex items-start justify-between">
             <div className="flex items-center gap-4">
-              <Avatar className="h-16 w-16">
-                <AvatarImage src={session?.user?.image || ""} />
-                <AvatarFallback>
-                  {session?.user?.name?.charAt(0) || "U"}
-                </AvatarFallback>
-              </Avatar>
+              <div className="relative">
+                <Avatar className="h-24 w-24">
+                  <AvatarImage src={session?.user?.image || ""} />
+                  <AvatarFallback>
+                    {session?.user?.name?.charAt(0) || "U"}
+                  </AvatarFallback>
+                </Avatar>
+                {isEditing && (
+                  <Button
+                    size="sm"
+                    className="absolute -bottom-2 -right-2 rounded-full"
+                  >
+                    Edit
+                  </Button>
+                )}
+              </div>
               <div>
-                <h2 className="text-xl font-semibold">
+                <h2 className="text-2xl font-semibold">
                   {session?.user?.name || "User Name"}
                 </h2>
                 <p className="text-gray-500">{session?.user?.email}</p>
+
+                {/* Social Links */}
+                <div className="mt-4 flex gap-3">
+                  {socialLinks.map((link, index) => (
+                    <TooltipProvider key={link.platform}>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <div className="relative">
+                            {isEditing ? (
+                              <Input
+                                type="url"
+                                placeholder={`${link.platform} URL`}
+                                value={link.url}
+                                onChange={(e) =>
+                                  handleSocialLinkChange(index, e.target.value)
+                                }
+                                className="absolute -top-10 w-[200px] text-sm"
+                              />
+                            ) : null}
+                            <Button
+                              variant={link.url ? "default" : "outline"}
+                              size="icon"
+                              className={
+                                link.url
+                                  ? "bg-green-600 hover:bg-green-700"
+                                  : ""
+                              }
+                              asChild
+                            >
+                              {link.url ? (
+                                <a
+                                  href={link.url}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                >
+                                  <link.icon className="h-4 w-4" />
+                                </a>
+                              ) : (
+                                <span>
+                                  <link.icon className="h-4 w-4" />
+                                </span>
+                              )}
+                            </Button>
+                          </div>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          {link.url
+                            ? `Visit ${link.platform}`
+                            : `Add ${link.platform}`}
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  ))}
+                </div>
               </div>
             </div>
             <Button
               onClick={() => setIsEditing(!isEditing)}
               variant="default"
-              className="bg-blue-600 hover:bg-blue-700"
+              className="bg-green-600 hover:bg-green-700"
             >
-              Edit
+              {isEditing ? "Save Changes" : "Edit Profile"}
             </Button>
           </div>
 
