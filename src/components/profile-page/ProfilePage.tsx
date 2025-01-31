@@ -3,13 +3,7 @@
 import { useState } from "react";
 import { useSession } from "next-auth/react";
 import { motion } from "framer-motion";
-import {
-  Github,
-  Linkedin,
-  Twitter,
-  Instagram,
-  Globe,
-} from "lucide-react";
+import { Github, Linkedin, Twitter, Instagram, Globe } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -82,56 +76,70 @@ export default function ProfilePage() {
             <p className="text-gray-500">{session?.user?.email}</p>
 
             {/* Social Links */}
-            <div className="mt-4 flex gap-3">
-              {socialLinks.map((link, index) => (
-                <TooltipProvider key={link.platform}>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <div className="relative">
-                        {isEditing ? (
-                          <Input
-                            type="url"
-                            placeholder={`${link.platform} URL`}
-                            value={link.url}
-                            onChange={(e) =>
-                              handleSocialLinkChange(index, e.target.value)
+            {/* Social Links */}
+            <div className="mt-4 space-y-3">
+              {isEditing ? (
+                <div className="grid grid-cols-1 gap-3">
+                  {socialLinks.map((link, index) => (
+                    <div
+                      key={link.platform}
+                      className="flex items-center gap-3"
+                    >
+                      <link.icon className="h-5 w-5 text-gray-600" />
+                      <Input
+                        type="url"
+                        placeholder={`${link.platform} URL`}
+                        value={link.url}
+                        onChange={(e) =>
+                          handleSocialLinkChange(index, e.target.value)
+                        }
+                        className="w-full"
+                      />
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="flex gap-3">
+                  {socialLinks.map((link) => (
+                    <TooltipProvider key={link.platform}>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button
+                            variant={link.url ? "default" : "outline"}
+                            size="icon"
+                            className={
+                              link.url ? "bg-green-600 hover:bg-green-700" : ""
                             }
-                            className="absolute -top-10 w-[200px] text-sm"
-                          />
-                        ) : null}
-                        <Button
-                          variant={link.url ? "default" : "outline"}
-                          size="icon"
-                          className={
-                            link.url ? "bg-green-600 hover:bg-green-700" : ""
-                          }
-                          asChild
-                        >
-                          {link.url ? (
-                            <a
-                              href={link.url}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                            >
-                              <link.icon className="h-4 w-4" />
-                            </a>
-                          ) : (
-                            <span>
-                              <link.icon className="h-4 w-4" />
-                            </span>
-                          )}
-                        </Button>
-                      </div>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      {link.url
-                        ? `Visit ${link.platform}`
-                        : `Add ${link.platform}`}
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              ))}
+                            asChild
+                          >
+                            {link.url ? (
+                              <a
+                                href={link.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                              >
+                                <link.icon className="h-4 w-4" />
+                              </a>
+                            ) : (
+                              <span>
+                                <link.icon className="h-4 w-4" />
+                              </span>
+                            )}
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          {link.url
+                            ? `Visit ${link.platform}`
+                            : `Add ${link.platform}`}
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  ))}
+                </div>
+              )}
             </div>
+
+            {/*Extra etc */}
           </div>
         </div>
         <Button
