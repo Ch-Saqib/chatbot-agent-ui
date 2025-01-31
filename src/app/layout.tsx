@@ -6,6 +6,9 @@ import { useEffect, useState } from "react";
 import "./globals.css";
 import { Sidebar } from "@/components/Sidebar";
 import { ThemeProvider } from "@/components/providers/theme-provider";
+import SessionProvider from "@/components/SessionProvider";
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "./api/auth/[...nextauth]/route";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,6 +32,8 @@ export default function RootLayout({
 }>) {
   const sidebar = useSidebar();
   const [isHydrated, setIsHydrated] = useState(false); // Track hydration
+  const session = getServerSession(authOptions);
+  
 
   useEffect(() => {
     setIsHydrated(true); // Set hydrated after mounting
@@ -52,7 +57,7 @@ export default function RootLayout({
             }`}
           >
               <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-            {children}
+            <SessionProvider session={session}>{children}</SessionProvider>
             </ThemeProvider>
           </main>
         </div>
