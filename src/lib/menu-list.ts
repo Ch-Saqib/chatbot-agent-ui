@@ -6,7 +6,9 @@ import {
   SquarePen,
   LayoutGrid,
   LucideIcon,
+  Plus,
   Bot,
+  MessageSquareMore,
 } from "lucide-react";
 
 type Submenu = {
@@ -31,7 +33,17 @@ type Group = {
 export function getMenuList(pathname: string): Group[] {
   return [
     {
-      groupLabel: "",
+      groupLabel: "Chat",
+      menus: [
+        {
+          href: "/chat",
+          label: "New Chat",
+          icon: Plus,
+        },
+      ],
+    },
+    {
+      groupLabel: "Dashboard",
       menus: [
         {
           href: "/home",
@@ -42,48 +54,12 @@ export function getMenuList(pathname: string): Group[] {
       ],
     },
     {
-      groupLabel: "",
+      groupLabel: "Chat History",
       menus: [
         {
-          href: "/chat",
-          label: "Chat",
-          icon: Bot,
-          submenus: [],
-        },
-      ],
-    },
-    {
-      groupLabel: "History",
-      menus: [
-        {
-          href: "",
-          label: "Posts",
-          icon: SquarePen,
-          submenus: [
-            {
-              href: "/",
-              label: "All History",
-            },
-            {
-              href: "/",
-              label: "New Chat",
-            },
-          ],
-        },
-      ],
-    },
-    {
-      groupLabel: "Settings",
-      menus: [
-        {
-          href: "/users",
-          label: "Users",
-          icon: Users,
-        },
-        {
-          href: "/account",
-          label: "Account",
-          icon: Settings,
+          href: "/chat-history",
+          label: "Hi",
+          icon: MessageSquareMore,
         },
       ],
     },
