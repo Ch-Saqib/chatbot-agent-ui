@@ -9,11 +9,11 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import PlaceholderContent from "@/components/demo/placeholder-content";
+import ProfilePage from "@/components/profile-page/ProfilePage";
 
 export default function AccountPage() {
   return (
-    <ContentLayout title="Account">
+    <ContentLayout title="Profile">
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
@@ -27,7 +27,7 @@ export default function AccountPage() {
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
-      <PlaceholderContent />
+      <ProfilePage />
     </ContentLayout>
   );
 }
