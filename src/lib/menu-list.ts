@@ -1,13 +1,7 @@
 import {
-  Tag,
-  Users,
-  Settings,
-  Bookmark,
-  SquarePen,
   LayoutGrid,
   LucideIcon,
   Plus,
-  Bot,
   MessageSquareMore,
 } from "lucide-react";
 

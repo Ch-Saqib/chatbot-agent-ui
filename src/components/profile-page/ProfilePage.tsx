@@ -74,8 +74,6 @@ export default function ProfilePage() {
               {session?.user?.name || "User Name"}
             </h2>
             <p className="text-gray-500">{session?.user?.email}</p>
-
-            {/* Social Links */}
             {/* Social Links */}
             <div className="mt-4 space-y-3">
               {isEditing ? (

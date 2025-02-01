@@ -1,15 +1,14 @@
 import { getServerSession } from "next-auth/next";
 import Link from "next/link";
-import { authOptions } from "../../api/auth/[...nextauth]/route";
 import { ContentLayout } from "@/components/admin-panel/content-layout";
 import {
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
-  BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import { authOptions } from "@/lib/authOptions";
 
 export default async function Home() {
   const session = await getServerSession(authOptions);
