@@ -8,9 +8,11 @@ import { CodePreview } from "@/components/CodePreview"
 import type { LearningAgentState, Message, AgentFramework, AgentConfig } from "@/lib/types"
 import { Textarea } from "./ui/textarea"
 import { Button } from "./ui/button"
-import { SendIcon, Loader2, Bot } from "lucide-react"
+import { SendIcon, Loader2, Bot, History } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
+import { Skeleton } from "@/components/ui/skeleton"
 
 const AGENT_CONFIGS: AgentConfig[] = [
   {
@@ -28,18 +30,21 @@ const AGENT_CONFIGS: AgentConfig[] = [
     framework: "crewai",
     description: "Specialized in CrewAI development",
   },
-  {
-    name:"React Agent",
-    framework:"react",
-    description:"This is React Agent"
-  }
 ]
+
+interface ChatHistory {
+  id: string
+  title: string
+  createdAt: string
+}
 
 export default function ChatInterface() {
   const [messages, setMessages] = useState<Message[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const [isInitialView, setIsInitialView] = useState(true)
   const [selectedFramework, setSelectedFramework] = useState<AgentFramework>("nextjs")
+  const [chatHistory, setChatHistory] = useState<ChatHistory[]>([])
+  const [loadingHistory, setLoadingHistory] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const { userInput, setUserInput } = useLearningAgentContext()
 
@@ -56,7 +61,25 @@ export default function ChatInterface() {
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
-  }, [messagesEndRef]) //Corrected dependency
+  }, [messages])
+
+  useEffect(() => {
+    fetchChatHistory()
+  }, [])
+
+  const fetchChatHistory = async () => {
+    setLoadingHistory(true)
+    try {
+      const response = await fetch("/api/chat/history")
+      if (!response.ok) throw new Error("Failed to fetch chat history")
+      const data = await response.json()
+      setChatHistory(data)
+    } catch (error) {
+      console.error("Error fetching chat history:", error)
+    } finally {
+      setLoadingHistory(false)
+    }
+  }
 
   const handleFrameworkChange = (framework: AgentFramework) => {
     setSelectedFramework(framework)
@@ -82,6 +105,33 @@ export default function ChatInterface() {
         content: input,
       })
     })
+
+    // Save chat history
+    try {
+      await fetch("/api/chat/history", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title: input.slice(0, 50), // Use first 50 characters as title
+          messages: [...messages, newMessage],
+        }),
+      })
+      fetchChatHistory() // Refresh chat history
+    } catch (error) {
+      console.error("Failed to save chat history:", error)
+    }
+  }
+
+  const loadChatHistory = async (id: string) => {
+    try {
+      const response = await fetch(`/api/chat/history/${id}`)
+      if (!response.ok) throw new Error("Failed to load chat history")
+      const data = await response.json()
+      setMessages(JSON.parse(data.messages))
+      setIsInitialView(false)
+    } catch (error) {
+      console.error("Error loading chat history:", error)
+    }
   }
 
   const renderMessage = (message: Message) => {
@@ -116,24 +166,60 @@ export default function ChatInterface() {
       <header className="text-center p-6 bg-white shadow-sm">
         <div className="flex items-center justify-between max-w-4xl mx-auto">
           <h1 className="text-2xl font-bold text-gray-800">AI Assistant</h1>
-          <Select value={selectedFramework} onValueChange={(value) => handleFrameworkChange(value as AgentFramework)}>
-            <SelectTrigger className="w-[200px]">
-              <SelectValue placeholder="Select framework" />
-            </SelectTrigger>
-            <SelectContent>
-              {AGENT_CONFIGS.map((config) => (
-                <SelectItem key={config.framework} value={config.framework}>
-                  <div className="flex items-center gap-2">
-                    <Bot className="w-4 h-4" />
-                    <div>
-                      <p className="font-medium">{config.name}</p>
-                      <p className="text-xs text-muted-foreground">{config.description}</p>
+          <div className="flex items-center space-x-4">
+            <Select value={selectedFramework} onValueChange={(value) => handleFrameworkChange(value as AgentFramework)}>
+              <SelectTrigger className="w-[200px]">
+                <SelectValue placeholder="Select framework" />
+              </SelectTrigger>
+              <SelectContent>
+                {AGENT_CONFIGS.map((config) => (
+                  <SelectItem key={config.framework} value={config.framework}>
+                    <div className="flex items-center gap-2">
+                      <Bot className="w-4 h-4" />
+                      <div>
+                        <p className="font-medium">{config.name}</p>
+                        <p className="text-xs text-muted-foreground">{config.description}</p>
+                      </div>
                     </div>
-                  </div>
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button variant="outline" size="icon">
+                  <History className="h-4 w-4" />
+                </Button>
+              </SheetTrigger>
+              <SheetContent>
+                <SheetHeader>
+                  <SheetTitle>Chat History</SheetTitle>
+                  <SheetDescription>Your previous conversations</SheetDescription>
+                </SheetHeader>
+                <div className="mt-4 space-y-2">
+                  {loadingHistory ? (
+                    <Skeleton className="h-10 w-full" />
+                  ) : chatHistory.length === 0 ? (
+                    <p className="text-center text-muted-foreground">No chat history available</p>
+                  ) : (
+                    chatHistory.map((chat) => (
+                      <Button
+                        key={chat.id}
+                        variant="outline"
+                        className="w-full justify-start"
+                        onClick={() => loadChatHistory(chat.id)}
+                      >
+                        <span className="truncate">{chat.title}</span>
+                        <span className="ml-auto text-xs text-muted-foreground">
+                          {new Date(chat.createdAt).toLocaleDateString()}
+                        </span>
+                      </Button>
+                    ))
+                  )}
+                </div>
+              </SheetContent>
+            </Sheet>
+          </div>
         </div>
       </header>
 
