@@ -1,30 +1,27 @@
-"use client";
+"use client"
 
-import React, {
-  createContext,
-  useContext,
-  useState,
-  type ReactNode,
-} from "react";
+import { createContext, useContext, useState, type ReactNode } from "react"
+import type { AgentFramework } from "@/lib/types"
 
 interface LearningAgentContextType {
-  userQuery: string;
-  setUserQuery: (query: string) => void;
-  userInput: string;
-  setUserInput: (input: string) => void;
+  userQuery: string
+  setUserQuery: (query: string) => void
+  userInput: string
+  setUserInput: (input: string) => void
+  framework: AgentFramework
+  setFramework: (framework: AgentFramework) => void
 }
 
-const LearningAgentContext = createContext<
-  LearningAgentContextType | undefined
->(undefined);
+const LearningAgentContext = createContext<LearningAgentContextType | undefined>(undefined)
 
 export const LearningAgentProvider = ({
   children,
 }: {
-  children: ReactNode;
+  children: ReactNode
 }) => {
-  const [userQuery, setUserQuery] = useState<string>("");
-  const [userInput, setUserInput] = useState<string>("");
+  const [userQuery, setUserQuery] = useState<string>("")
+  const [userInput, setUserInput] = useState<string>("")
+  const [framework, setFramework] = useState<AgentFramework>("nextjs")
 
   return (
     <LearningAgentContext.Provider
@@ -33,19 +30,20 @@ export const LearningAgentProvider = ({
         setUserQuery,
         userInput,
         setUserInput,
+        framework,
+        setFramework,
       }}
     >
       {children}
     </LearningAgentContext.Provider>
-  );
-};
+  )
+}
 
 export const useLearningAgentContext = () => {
-  const context = useContext(LearningAgentContext);
+  const context = useContext(LearningAgentContext)
   if (context === undefined) {
-    throw new Error(
-      "useLearningAgentContext must be used within a LearningAgentProvider"
-    );
+    throw new Error("useLearningAgentContext must be used within a LearningAgentProvider")
   }
-  return context;
-};
+  return context
+}
+

@@ -3,6 +3,7 @@ import {
   LucideIcon,
   Plus,
   MessageSquareMore,
+  Database,
 } from "lucide-react";
 
 type Submenu = {
@@ -43,6 +44,12 @@ export function getMenuList(pathname: string): Group[] {
           href: "/home",
           label: "Home",
           icon: LayoutGrid,
+          submenus: [],
+        },
+        {
+          href: "/admin/rag",
+          label: "RAG Management",
+          icon: Database,
           submenus: [],
         },
       ],
